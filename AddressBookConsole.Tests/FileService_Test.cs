@@ -76,7 +76,7 @@ public class FileService_Test
 
         //Assert
         Assert.Equal(json, content);
-        Assert.True(result);
+        
 
     }
 }

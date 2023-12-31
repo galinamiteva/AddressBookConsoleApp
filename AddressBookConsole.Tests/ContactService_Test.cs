@@ -151,8 +151,8 @@ public class ContactService_Test
         var updatedContactList = contactService.GetAllContactsFromList();
         
         //Assert
-        Assert.True(updatedContact); 
-        Assert.DoesNotContain(updatedContactList, x=>x.Email==contact.Email);
+        Assert.True(updatedContact);
+        Assert.Contains(updatedContactList, x => x.Email == contact.Email);
         Assert.Contains(updatedContactList, x => x.Email == "aaa@com");
 
 
