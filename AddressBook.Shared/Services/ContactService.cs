@@ -12,9 +12,9 @@ namespace AddressBook.Shared.Services;
 
 public class ContactService : IContactService
 {
-    private readonly FileService _fileService = new FileService(@"C:\ProjectsCSharp\AddressBookConsoleApp\content.json");
+    private readonly FileService _fileService = new ();
     private List<Contact> _contactList = new List<Contact>();
-    private readonly string _filePath = @"C:\ProjectsCSharp\AddressBookConsoleApp\content.json";
+    //private readonly string _filePath = @"C:\ProjectsCSharp\AddressBookConsoleApp\content.json";
 
     /// <summary>
     /// Add a contact to the list if it does not already exist based on the email address.
@@ -29,10 +29,9 @@ public class ContactService : IContactService
             if (!_contactList.Any(x => x.Email == contact.Email))
             {
                 _contactList.Add((Contact)contact);
-                //_fileService.SaveContentToFile(JsonConvert.SerializeObject(_contactList));
-                //return true;
+                
                 string json = JsonConvert.SerializeObject(contact, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All })!;
-                var result = _fileService.SaveContentToFile(_filePath, json);
+                var result = _fileService.SaveContentToFile( json);
                 return true;
             }
         }
@@ -49,9 +48,10 @@ public class ContactService : IContactService
     {
         try
         {
-            var content = _fileService.GetContentFromFile(_filePath);
-            if (!string.IsNullOrEmpty(content))
+            
+            if (_contactList!=null)
             {
+                var content = _fileService.GetContentFromFile();
                 _contactList = JsonConvert.DeserializeObject<List<Contact>>(content, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All })!;
                 return _contactList;
             }
@@ -61,6 +61,8 @@ public class ContactService : IContactService
         catch (Exception ex) { Debug.WriteLine(ex.Message); }
         return null!;
     }
+
+
 
     /// <summary>
     /// Get one contact based on email.
@@ -76,7 +78,7 @@ public class ContactService : IContactService
                 {
                     if (contact.Email == email)
                     {
-                        var content = _fileService.GetContentFromFile(_filePath);
+                        var content = _fileService.GetContentFromFile();
                         _contactList = JsonConvert.DeserializeObject<List<Contact>>(content, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All })!;
                         return contact;
                     }
@@ -103,7 +105,7 @@ public class ContactService : IContactService
                     {
                         _contactList.Remove(contact);
                         string json = JsonConvert.SerializeObject(contact, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All })!;
-                        var result = _fileService.SaveContentToFile(_filePath, json);
+                        var result = _fileService.SaveContentToFile(json);
                         return result;
                     }
                 }
@@ -143,7 +145,7 @@ public class ContactService : IContactService
 
 
                     string json = JsonConvert.SerializeObject(contact, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All })!;
-                    var result = _fileService.SaveContentToFile(_filePath, json);
+                    var result = _fileService.SaveContentToFile(json);
                     return result;
 
                 }

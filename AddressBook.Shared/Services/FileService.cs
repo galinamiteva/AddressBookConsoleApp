@@ -5,28 +5,28 @@ using System.Diagnostics;
 
 namespace AddressBook.Shared.Services;
 
-    public class FileService (string filePath)
+    public class FileService : IFileService
     {
-        private readonly string _filePath = filePath;
+        private readonly string _filePath = @"C:\ProjectsCSharp\content.json";
 
     /// <summary>
     /// Save content to file
     /// </summary>
     /// <param name="content">Content to be saved</param>
     /// <returns>Returns true if save is successfull</returns>
-    public bool SaveContentToFile(string filePath, string content)
+    public bool SaveContentToFile( string content)
         {
             try
             {
-                File.Create(_filePath);
-                File.Delete(_filePath);
+                
 
 
                 using (var sw = new StreamWriter(_filePath))
                 {
                     sw.Write(content);
+                    return true;
                 }
-                return true;
+                
 
             }
             catch (Exception ex) { Debug.WriteLine(ex.Message); }
@@ -37,14 +37,17 @@ namespace AddressBook.Shared.Services;
     /// Get content from file
     /// </summary>
     /// <returns>Returns the text from file if found. Else return null</returns>
-    public string GetContentFromFile(string filePath)
+    public string GetContentFromFile()
         {
             try
             {
                 if (File.Exists(_filePath))
                 {
-                    using var sr = new StreamReader(_filePath); 
-                    return sr.ReadToEnd();
+                    using (var sr = new StreamReader(_filePath))
+                        {
+                            return sr.ReadToEnd();
+                        }
+                    
                 }
 
             }
