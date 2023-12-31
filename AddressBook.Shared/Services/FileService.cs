@@ -7,7 +7,7 @@ namespace AddressBook.Shared.Services;
 
     public class FileService : IFileService
     {
-        private readonly string _filePath = @"C:\ProjectsCSharp\content.json";
+        private readonly string _filePath = @"C:\ProjectsCSharp\AddressBookConsoleApp\content.json";
 
     /// <summary>
     /// Save content to file

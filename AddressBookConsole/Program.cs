@@ -8,6 +8,8 @@ using Microsoft.Extensions.Hosting;
 var builder = Host.CreateDefaultBuilder().ConfigureServices(services =>
 {
     services.AddSingleton<IContactService, ContactService>();
+    services.AddSingleton<IFileService, FileService>();
+
     services.AddSingleton<MenuService>();
 
 }).Build();

@@ -114,11 +114,17 @@ public class MenuService
                 if (validatedPhoneNumber == null) { break; }
                 contact.PhoneNumber = validatedPhoneNumber;
 
-                Console.Write("Address: ");
-                var validatedAddress = Console.ReadLine()!;
-                validatedAddress = ValidateText(validatedAddress);
-                if (validatedAddress == null) { break; }
-                contact.Address = validatedAddress;
+                Console.Write("Street: ");
+                var validatedStreet = Console.ReadLine()!;
+                validatedStreet = ValidateText(validatedStreet);
+                if (validatedStreet == null) { break; }
+                contact.Street = validatedStreet;
+
+                Console.Write("StreetNumber: ");
+                var validatedStreetNumber = Console.ReadLine()!;
+                validatedStreetNumber = ValideNumber(validatedStreet);
+                if (validatedStreetNumber == null) { break; }
+                contact.StreetNumber = validatedStreetNumber;
 
                 Console.Write("PostalCode: ");
                 var validatedPostalCode = Console.ReadLine()!;
@@ -177,7 +183,17 @@ public class MenuService
                 {
                     foreach (var contact in contactList)
                     {
-                        Console.WriteLine($"Name {contact.FirstName} {contact.LastName}\nEmail: {contact.Email}\nPhoneNumber: {contact.PhoneNumber}\nAddress: {contact.Address}\nPostalCode: {contact.PostalCode}\nCity: {contact.City}\nCountry: {contact.Country}\n " + "\n=============================================\n");
+                        Console.WriteLine($"First name: {contact.FirstName}\n" +
+                                            $"Last name: {contact.LastName}\n" +
+                                            $"Email: {contact.Email}\n" +
+                                            $"Phone number: {contact.PhoneNumber}\n" +
+                                            $"Street: {contact.Street}\n" +
+                                            $"StreetNumber: {contact.StreetNumber}\n" +
+                                            $"Postal code: {contact.PostalCode}\n" +
+                                            $"City: {contact.City}\n" +
+                                            $"Country: {contact.Country}\n" +
+                                            "\n===========================\n"
+                            );
                     }
                     break;
                 }
@@ -215,7 +231,7 @@ public class MenuService
                     ShowText("Contact was found");
                     Console.WriteLine("==================");
                     Console.WriteLine();
-                    Console.WriteLine($"Name {contactToBeUpdated.FirstName} {contactToBeUpdated.LastName}\nEmail: {contactToBeUpdated.Email}\nPhoneNumber: {contactToBeUpdated.PhoneNumber}\nAddress: {contactToBeUpdated.Address}\nPostalCode: {contactToBeUpdated.PostalCode}\nCity: {contactToBeUpdated.City}\nCountry: {contactToBeUpdated.Country}\n " + "\n=============================================\n");
+                    Console.WriteLine($"First Name: {contactToBeUpdated.FirstName}\nLastname: {contactToBeUpdated.LastName}\nEmail: {contactToBeUpdated.Email}\nPhoneNumber: {contactToBeUpdated.PhoneNumber}\nStreet: {contactToBeUpdated.Street}\nStreetNumber:{contactToBeUpdated.StreetNumber}\nPostalCode: {contactToBeUpdated.PostalCode}\nCity: {contactToBeUpdated.City}\nCountry: {contactToBeUpdated.Country}\n " + "\n=============================================\n");
                     Console.Write("\nDo you want to update? (y/n): ");
                     string contactAnswerUpdate = ValidateText(Console.ReadLine()!);
                     Thread.Sleep(300);
@@ -248,11 +264,17 @@ public class MenuService
                         if (validatedPhoneNumber == null) { break; }
                         contactToBeUpdated.PhoneNumber = validatedPhoneNumber;
 
-                        Console.Write("Address: ");
-                        var validatedAddress = Console.ReadLine()!;
-                        validatedAddress = ValidateText(validatedAddress);
-                        if (validatedAddress == null) { break; }
-                        contactToBeUpdated.Address = validatedAddress;
+                        Console.Write("Street: ");
+                        var validatedStreet = Console.ReadLine()!;
+                        validatedStreet = ValidateText(validatedStreet);
+                        if (validatedStreet == null) { break; }
+                        contactToBeUpdated.Street = validatedStreet;
+
+                        Console.Write("StreetNumber: ");
+                        var validatedStreetNumber = Console.ReadLine()!;
+                        validatedStreetNumber = ValideNumber(validatedStreetNumber);
+                        if (validatedStreetNumber == null) { break; }
+                        contactToBeUpdated.StreetNumber= validatedStreetNumber;
 
                         Console.Write("PostalCode: ");
                         var validatedPostalCode = Console.ReadLine()!;
@@ -273,7 +295,7 @@ public class MenuService
                         if (validatedCountry == null) { break; }
                         contactToBeUpdated.Country = validatedCountry;
 
-                        _contactService.UpdateContactInList(contactEmailInput, validatedFirstName, validatedLastName, validatedAddress,validatedPhoneNumber, validatedPostalCode, validatedCity, validatedCountry );
+                        _contactService.UpdateContactInList(contactEmailInput, validatedFirstName, validatedLastName, validatedStreet, validatedStreetNumber,validatedPhoneNumber, validatedPostalCode, validatedCity, validatedCountry );
 
                         ShowText("Contact was updated");
                         break;
@@ -308,13 +330,13 @@ public class MenuService
                 ShowText("Delete contact");
                 Console.WriteLine("====================\n");
 
-                Console.Write("Delete a contact by email");
+                Console.Write("Delete a contact by email: ");
                 string contactRemoveInputEmail = ValideEmail(Console.ReadLine()!);
                 var contactToBeRemoveFound = _contactService.GetOneContact(contactRemoveInputEmail);
 
                 if (contactToBeRemoveFound != null)
                 {
-                    Console.WriteLine($"Name {contactToBeRemoveFound.FirstName} {contactToBeRemoveFound.LastName}\nEmail: {contactToBeRemoveFound.Email}\nPhoneNumber: {contactToBeRemoveFound.PhoneNumber}\nAddress: {contactToBeRemoveFound.Address}\nPostalCode: {contactToBeRemoveFound.PostalCode}\nCity: {contactToBeRemoveFound.City}\nCountry: {contactToBeRemoveFound.Country}\n " + "\n=============================================\n");
+                    Console.WriteLine($"First name: {contactToBeRemoveFound.FirstName}\nLast Name: {contactToBeRemoveFound.LastName}\nEmail: {contactToBeRemoveFound.Email}\nPhoneNumber: {contactToBeRemoveFound.PhoneNumber}\nStreet: {contactToBeRemoveFound.Street}\nStreetNumber: {contactToBeRemoveFound.StreetNumber}\nPostalCode: {contactToBeRemoveFound.PostalCode}\nCity: {contactToBeRemoveFound.City}\nCountry: {contactToBeRemoveFound.Country}\n " + "\n=============================================\n");
                     Console.WriteLine();
                     Console.WriteLine("Do you want to delete? (y/n): ");
                     string contactAnswerDelete = ValidateText(Console.ReadLine()!);
@@ -364,7 +386,7 @@ public class MenuService
                 ShowText("Contact was found");
                 Console.WriteLine("==================");
                 Console.WriteLine();
-                Console.WriteLine($"Name {contactFound.FirstName} {contactFound.LastName}\nEmail: {contactFound.Email}\nPhoneNumber: {contactFound.PhoneNumber}\nAddress: {contactFound.Address}\nPostalCode: {contactFound.PostalCode}\nCity: {contactFound.City}\nCountry: {contactFound.Country}\n " + "\n=============================================\n");
+                Console.WriteLine($"First name: {contactFound.FirstName}\nLast name: {contactFound.LastName}\nEmail: {contactFound.Email}\nPhoneNumber: {contactFound.PhoneNumber}\nStreet: {contactFound.Street}\nStreetNumber: {contactFound.StreetNumber}\nPostalCode: {contactFound.PostalCode}\nCity: {contactFound.City}\nCountry: {contactFound.Country}\n " + "\n=============================================\n");
             }
             else
             {

@@ -12,9 +12,10 @@ namespace AddressBook.Shared.Services;
 
 public class ContactService : IContactService
 {
-    private readonly FileService _fileService = new ();
-    private List<Contact> _contactList = new List<Contact>();
-    //private readonly string _filePath = @"C:\ProjectsCSharp\AddressBookConsoleApp\content.json";
+
+    public List<IContact> ContactList { get; set; } = [];
+    private readonly FileService _fileService = new();
+
 
     /// <summary>
     /// Add a contact to the list if it does not already exist based on the email address.
@@ -26,12 +27,12 @@ public class ContactService : IContactService
     {
         try
         {
-            if (!_contactList.Any(x => x.Email == contact.Email))
+            if (!ContactList.Any(x => x.Email == contact.Email))
             {
-                _contactList.Add((Contact)contact);
-                
-                string json = JsonConvert.SerializeObject(contact, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All })!;
-                var result = _fileService.SaveContentToFile( json);
+                ContactList.Add((Contact)contact);
+
+                string json = JsonConvert.SerializeObject(ContactList, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All })!;
+                var result = _fileService.SaveContentToFile(json);
                 return true;
             }
         }
@@ -48,17 +49,23 @@ public class ContactService : IContactService
     {
         try
         {
-            
-            if (_contactList!=null)
+
+            if (ContactList != null)
             {
+
                 var content = _fileService.GetContentFromFile();
-                _contactList = JsonConvert.DeserializeObject<List<Contact>>(content, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All })!;
-                return _contactList;
+                ContactList = JsonConvert.DeserializeObject<List<IContact>>(content, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All })!;
+
+
+                return ContactList!;
             }
 
-
         }
-        catch (Exception ex) { Debug.WriteLine(ex.Message); }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex.Message);
+        }
+
         return null!;
     }
 
@@ -74,12 +81,12 @@ public class ContactService : IContactService
         try
         {
             if (!string.IsNullOrEmpty(email))
-                foreach (var contact in _contactList)
+                foreach (var contact in ContactList)
                 {
                     if (contact.Email == email)
                     {
                         var content = _fileService.GetContentFromFile();
-                        _contactList = JsonConvert.DeserializeObject<List<Contact>>(content, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All })!;
+                        ContactList = JsonConvert.DeserializeObject<List<IContact>>(content, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All })!;
                         return contact;
                     }
                 }
@@ -99,12 +106,12 @@ public class ContactService : IContactService
         {
             if (!string.IsNullOrEmpty(email))
             {
-                foreach (var contact in _contactList)
+                foreach (var contact in ContactList)
                 {
                     if (contact.Email == email)
                     {
-                        _contactList.Remove(contact);
-                        string json = JsonConvert.SerializeObject(contact, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All })!;
+                        ContactList.Remove(contact);
+                        string json = JsonConvert.SerializeObject(ContactList, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All })!;
                         var result = _fileService.SaveContentToFile(json);
                         return result;
                     }
@@ -121,30 +128,34 @@ public class ContactService : IContactService
     /// <param name="email">Email to current contact.</param>
     /// <param name="updatedFirstName">updatedFirstName.</param>
     /// <param name="updatedLastName">updatedLastName.</param>
-    /// <param name="updatedAddress">updatedAddress.</param>
+    /// <param name="Street">updatedStreet.</param>
+    /// <param name="updatedStreetNumber">updatedStreetNumber.</param>
     /// <param name="updatedCity">updatedCity.</param>
     /// <param name="updatedPhoneNumber">updatedPhoneNumber.</param>
     /// <param name="updatedPostalCode">updatedPostalCode.</param>
     /// <param name="updatedCountry">updatedCountry.</param>
     /// <returns>Returns true if contact is updated and saved to file. Else returns false.</returns>
-    public bool UpdateContactInList(string email, string updatedFirstName, string updatedLastName, string updatedAddress, string updatedCity, string updatedPhoneNumber, string updatedPostalCode, string updatedCountry)
+    public bool UpdateContactInList(string email, string updatedFirstName, string updatedLastName, string updatedStreet, string updatedStreetNumber, string updatedPhoneNumber, string updatedPostalCode, string updatedCity, string updatedCountry)
+
+    //void UpdateContactInList(string contactEmailInput, string validatedFirstName, string validatedLastName, string validatedStreet, string validatedStreetNumber, string validatedPhoneNumber, string validatedPostalCode, string validatedCity, string validatedCountry);
     {
         try
         {
-            foreach (var contact in _contactList)
+            foreach (var contact in ContactList)
             {
                 if (contact.Email == email)
                 {
                     contact.FirstName = updatedFirstName;
                     contact.LastName = updatedLastName;
-                    contact.Address = updatedAddress;
+                    contact.Street = updatedStreet;
+                    contact.StreetNumber = updatedStreetNumber;
                     contact.City = updatedCity;
                     contact.PhoneNumber = updatedPhoneNumber;
                     contact.PostalCode = updatedPostalCode;
                     contact.Country = updatedCountry;
 
 
-                    string json = JsonConvert.SerializeObject(contact, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All })!;
+                    string json = JsonConvert.SerializeObject(ContactList, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All })!;
                     var result = _fileService.SaveContentToFile(json);
                     return result;
 
